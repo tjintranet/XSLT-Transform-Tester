@@ -1,0 +1,486 @@
+/* Custom styles for XSLT Transformer */
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: #dee2e6;
+    --header-bg: #f8f9fa;
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --input-focus-border: #86b7fe;
+    --textarea-bg: #f8f9fa;
+    --btn-outline-border: #6c757d;
+    --btn-outline-color: #6c757d;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    
+    /* XML Syntax Highlighting Colors - Light Theme */
+    --xml-tag-color: #0066cc;
+    --xml-attribute-color: #cc6600;
+    --xml-value-color: #009900;
+    --xml-comment-color: #808080;
+    --xml-declaration-color: #cc0066;
+    --xml-cdata-color: #660066;
+    --xml-bracket-color: #666666;
+    --xml-text-color: #333333;
+    --xml-bg-color: #f8f9fa;
+    --xml-border-color: #e9ecef;
+}
+
+[data-theme="dark"] {
+    --bg-color: #212529;
+    --text-color: #ffffff;
+    --card-bg: #343a40;
+    --card-border: #495057;
+    --header-bg: #343a40;
+    --input-bg: #495057;
+    --input-border: #6c757d;
+    --input-focus-border: #86b7fe;
+    --textarea-bg: #495057;
+    --btn-outline-border: #adb5bd;
+    --btn-outline-color: #adb5bd;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    
+    /* XML Syntax Highlighting Colors - Dark Theme */
+    --xml-tag-color: #4fc3f7;
+    --xml-attribute-color: #ffb74d;
+    --xml-value-color: #81c784;
+    --xml-comment-color: #9e9e9e;
+    --xml-declaration-color: #f06292;
+    --xml-cdata-color: #ba68c8;
+    --xml-bracket-color: #bdbdbd;
+    --xml-text-color: #e0e0e0;
+    --xml-bg-color: #2d3748;
+    --xml-border-color: #4a5568;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+/* Header Styles */
+header {
+    background: var(--header-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color) !important;
+}
+
+header .text-muted {
+    color: var(--text-color) !important;
+    opacity: 0.7;
+}
+
+header .lead {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Dark Mode Toggle */
+#darkModeToggle {
+    border-color: var(--btn-outline-border);
+    color: var(--btn-outline-color);
+    transition: all 0.3s ease;
+}
+
+#darkModeToggle:hover {
+    background-color: var(--btn-outline-color);
+    color: var(--card-bg);
+}
+
+/* Card Enhancements */
+.card {
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    min-height: 400px;
+    transition: all 0.3s ease;
+}
+
+.card-header {
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 600;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--card-border);
+    color: var(--text-color);
+}
+
+.card-body {
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+/* File Input Styling */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.form-control::placeholder {
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.form-label {
+    color: var(--text-color);
+}
+
+.form-text {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.btn-success {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-success:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.btn-success:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--input-border);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--input-border);
+    border-color: var(--input-border);
+    color: var(--card-bg);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    color: var(--bg-color);
+}
+
+/* Status Messages */
+.alert {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Result Textarea */
+#resultTextarea {
+    border-radius: 6px;
+    background: var(--textarea-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+#resultTextarea:focus {
+    background: var(--textarea-bg);
+    border-color: var(--input-focus-border);
+    color: var(--text-color);
+}
+
+/* XML Syntax Highlighting Styles */
+.highlighted-xml {
+    border-radius: 6px;
+    background: var(--xml-bg-color);
+    border: 1px solid var(--xml-border-color);
+    max-height: 500px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.xml-highlighted {
+    margin: 0;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--xml-text-color);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+}
+
+/* XML Syntax Elements */
+.xml-tag {
+    color: var(--xml-tag-color);
+    font-weight: 600;
+}
+
+.xml-attribute {
+    color: var(--xml-attribute-color);
+    font-weight: 500;
+}
+
+.xml-value {
+    color: var(--xml-value-color);
+}
+
+.xml-comment {
+    color: var(--xml-comment-color);
+    font-style: italic;
+}
+
+.xml-declaration {
+    color: var(--xml-declaration-color);
+    font-weight: 600;
+}
+
+.xml-cdata {
+    color: var(--xml-cdata-color);
+    background: rgba(186, 104, 200, 0.1);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.xml-bracket {
+    color: var(--xml-bracket-color);
+    font-weight: 600;
+}
+
+.xml-text {
+    color: var(--xml-text-color);
+}
+
+/* Result Button Group */
+#resultButtonGroup {
+    display: flex;
+    margin-left: auto;
+}
+
+#resultButtonGroup .btn {
+    background-color: var(--card-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    border-radius: 0;
+}
+
+#resultButtonGroup .btn:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+#resultButtonGroup .btn:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#resultButtonGroup .btn:not(:first-child) {
+    border-left: none;
+}
+
+#resultButtonGroup .btn:hover {
+    background-color: var(--input-border);
+    color: var(--card-bg);
+    z-index: 1;
+    position: relative;
+}
+
+/* Lighter hover state for dark mode */
+[data-theme="dark"] #resultButtonGroup .btn:hover {
+    background-color: #6c757d;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+/* Highlight Toggle Button */
+#highlightToggle {
+    background-color: var(--card-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+#highlightToggle:hover {
+    background-color: var(--input-border);
+    color: var(--card-bg);
+}
+
+[data-theme="dark"] #highlightToggle:hover {
+    background-color: #6c757d;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+/* Scrollbar Styling for Highlighted XML */
+.highlighted-xml::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.highlighted-xml::-webkit-scrollbar-track {
+    background: var(--xml-bg-color);
+}
+
+.highlighted-xml::-webkit-scrollbar-thumb {
+    background: var(--xml-border-color);
+    border-radius: 4px;
+}
+
+.highlighted-xml::-webkit-scrollbar-thumb:hover {
+    background: var(--input-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    .xml-highlighted {
+        font-size: 12px;
+    }
+    
+    #highlightToggle {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+/* Icon colors */
+.text-success {
+    color: #198754 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+/* Loading animations */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Form validation styles */
+.form-control.is-valid {
+    border-color: #198754;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+/* Enhanced modal styling */
+.modal-content {
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--card-border);
+}
+
+.modal-body {
+    color: var(--text-color);
+}
+
+/* Alert styling for dark mode */
+[data-theme="dark"] .alert-info {
+    background-color: #0c5460;
+    border-color: #0c5460;
+    color: #d1ecf1;
+}
+
+[data-theme="dark"] .alert-success {
+    background-color: #155724;
+    border-color: #155724;
+    color: #d4edda;
+}
+
+[data-theme="dark"] .alert-danger {
+    background-color: #721c24;
+    border-color: #721c24;
+    color: #f8d7da;
+}
+
+/* Badge styling for OR divider */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Enhanced info alert */
+.alert-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+[data-theme="dark"] .alert-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+/* Button close for dark mode */
+[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Syntax highlighting animation */
+.xml-highlighted {
+    animation: fadeInHighlight 0.3s ease-in-out;
+}
+
+@keyframes fadeInHighlight {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
