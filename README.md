@@ -1,32 +1,37 @@
-# XSLT Transformer
+# XSLT Transformer - XML/JDF Processor
 
-A modern, web-based XSLT transformation tool that allows you to upload XML and XSLT files and perform client-side transformations with syntax highlighting and intelligent file type detection.
+A modern, web-based XSLT transformation tool that allows you to upload XML and JDF files and perform client-side transformations with syntax highlighting and intelligent file type detection.
 
-![XSLT Transformer Interface](https://img.shields.io/badge/Interface-Bootstrap%205-blue) ![Browser Support](https://img.shields.io/badge/Browser-Modern%20Browsers-green) ![License](https://img.shields.io/badge/License-MIT-brightgreen)
+![XSLT Transformer Interface](https://img.shields.io/badge/Interface-Bootstrap%205-blue) ![Browser Support](https://img.shields.io/badge/Browser-Modern%20Browsers-green) ![JDF Support](https://img.shields.io/badge/JDF-Supported-orange) ![License](https://img.shields.io/badge/License-MIT-brightgreen)
 
 ## ✨ Features
 
 ### Core Functionality
 - **Client-Side Processing**: All transformations happen in your browser - no server required
-- **File Upload**: Drag & drop or click to upload XML and XSLT files
-- **Real-Time Validation**: Instant validation of XML and XSLT syntax
+- **Multiple Input Formats**: Support for XML and JDF (Job Definition Format) files
+- **File Upload**: Drag & drop or click to upload XML/JDF and XSLT files
+- **Real-Time Validation**: Instant validation of XML, JDF, and XSLT syntax
 - **Intelligent Output**: Automatically detects XSLT output method (`xml`, `html`, `text`) for proper file extensions
+- **Smart File Detection**: Preserves JDF format in output when appropriate
 - **Download Results**: Save transformed files with appropriate extensions and MIME types
 
 ### User Interface
 - **Modern Design**: Clean, responsive Bootstrap 5 interface
 - **Dark/Light Mode**: Toggle between themes with persistent preference storage
-- **Syntax Highlighting**: Beautiful XML syntax highlighting with color-coded elements
+- **Syntax Highlighting**: Beautiful XML/JDF syntax highlighting with color-coded elements
 - **View Toggle**: Switch between highlighted and raw text views
-- **Status Messages**: Clear feedback and error reporting
+- **Status Messages**: Clear feedback and error reporting with JDF-specific validation
 - **Responsive Layout**: Works on desktop, tablet, and mobile devices
+- **JDF Information**: Built-in help modal explaining JDF format and use cases
 
 ### Advanced Features
-- **XML Syntax Highlighting**: 
+- **XML/JDF Syntax Highlighting**: 
   - Color-coded tags, attributes, values, and comments
   - Support for namespaces and CDATA sections
   - Processing instruction highlighting
-- **Smart File Detection**: Automatically determines if output should be treated as XML, HTML, or text
+  - JDF-specific element recognition
+- **Smart File Detection**: Automatically determines if output should be treated as XML, JDF, HTML, or text
+- **JDF Validation**: Comprehensive validation for JDF-specific elements and structure
 - **Error Handling**: Comprehensive error messages for invalid files or transformation issues
 - **Browser Compatibility**: Checks for XSLT processor support
 
@@ -51,18 +56,18 @@ npx http-server
 ### Basic Usage
 
 1. **Open the Application**: Navigate to `index.html` in your browser
-2. **Upload XML File**: Click "XML Document" and select your XML file
-3. **Upload XSLT File**: Click "XSLT Document" and select your XSLT stylesheet
-4. **Transform**: Click the "Transform XML" button
+2. **Upload XML/JDF File**: Click "XML/JDF Document" and select your XML or JDF file
+3. **Upload XSLT File**: Click "XSLT Stylesheet" and select your XSLT stylesheet
+4. **Transform**: Click the "Transform Document" button
 5. **View Results**: See the transformed output with syntax highlighting
-6. **Download**: Save the result with the appropriate file extension
+6. **Download**: Save the result with the appropriate file extension (.xml, .jdf, .html, .csv, .txt)
 
 ## 📁 File Structure
 
 ```
 xslt-transformer/
-├── index.html          # Main HTML interface
-├── script.js           # Core application logic
+├── index.html          # Main HTML interface with JDF support
+├── script.js           # Core application logic with JDF handling
 ├── style.css           # Styling and themes
 ├── favicon-32x32.png   # Favicon (32x32)
 ├── apple-touch-icon.png # Apple touch icon
@@ -82,22 +87,31 @@ xslt-transformer/
 - **File API Support**: For reading uploaded files
 - **ES6+ Support**: Modern JavaScript features
 
-### XML/XSLT Version Constraints
+### XML/JDF/XSLT Version Constraints
 - **XML Version**: Supports XML 1.0 and XML 1.1
+- **JDF Version**: Supports all JDF versions (JDF is XML-based)
 - **XSLT Version**: Supports XSLT 1.0 (browser native implementation)
 - **XSLT 2.0/3.0**: Not supported (requires browser's built-in XSLTProcessor which only supports XSLT 1.0)
 - **Encoding**: UTF-8, UTF-16, and other standard encodings supported
-- **Namespaces**: Full XML namespace support
+- **Namespaces**: Full XML namespace support including JDF namespaces
 
 ### File Size Limits
-- **XML Files**: Maximum 10MB
+- **XML/JDF Files**: Maximum 10MB
 - **XSLT Files**: Maximum 5MB
 - **Validation**: Real-time file size checking
 
 ### Supported File Types
 - **XML**: `.xml` files (XML 1.0 and 1.1)
+- **JDF**: `.jdf` files (Job Definition Format - XML-based)
 - **XSLT**: `.xsl`, `.xslt` files (XSLT 1.0 only)
-- **Output**: Automatically determined (`.xml`, `.html`, `.txt`)
+- **Output**: Automatically determined (`.xml`, `.jdf`, `.html`, `.csv`, `.txt`)
+
+### JDF Support Details
+- **Format Recognition**: Automatic detection of JDF files by extension and content analysis
+- **JDF Validation**: Checks for JDF-specific elements like `<JDF>`, `Type` attributes, and ID attributes
+- **Namespace Support**: Full support for JDF namespaces and CIP4 standards
+- **Output Preservation**: Maintains JDF file extension when output is XML-like
+- **MIME Type**: Uses appropriate MIME type (`application/vnd.cip4-jdf+xml`) for JDF files
 
 ### Important Limitations
 - **XSLT Version**: Only XSLT 1.0 is supported due to browser limitations
@@ -137,7 +151,7 @@ The application automatically detects the XSLT output method:
 <!-- HTML Output -->
 <xsl:output method="html" encoding="UTF-8"/>
 
-<!-- XML Output -->
+<!-- XML Output (also suitable for JDF) -->
 <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
 <!-- Text Output -->
@@ -159,107 +173,134 @@ You can customize the appearance by modifying CSS variables:
 
 ## 📖 Usage Examples
 
-### Example 1: Basic XML to HTML Transformation
+### Example 1: JDF to HTML Report Transformation
 
-**XML Input** (`books.xml`):
+**JDF Input** (`print-job.jdf`):
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<library>
-    <book id="1">
-        <title>The Great Gatsby</title>
-        <author>F. Scott Fitzgerald</author>
-        <year>1925</year>
-    </book>
-    <book id="2">
-        <title>To Kill a Mockingbird</title>
-        <author>Harper Lee</author>
-        <year>1960</year>
-    </book>
-</library>
+<JDF xmlns="http://www.cip4.org/JDFSchema_1_1" Type="Product" ID="n_000001" JobID="J001">
+    <NodeInfo>
+        <Employee PersonalID="OP001">
+            <Person DescriptiveName="John Operator"/>
+        </Employee>
+    </NodeInfo>
+    <ResourcePool>
+        <Component Class="Quantity" ID="r_000001" ComponentType="FinalProduct">
+            <Component Class="Quantity" ID="r_000002" ComponentType="Sheet" Amount="1000"/>
+        </Component>
+        <Media Class="Consumable" ID="r_000003" 
+               MediaType="Paper" Weight="80" Dimension="595.275 841.89"/>
+    </ResourcePool>
+    <CustomerInfo CustomerID="CUST001" CustomerJobID="ORDER2024001"/>
+</JDF>
 ```
 
-**XSLT Stylesheet** (`books.xsl`):
+**XSLT Stylesheet** (`jdf-to-report.xsl`):
 ```xsl
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:jdf="http://www.cip4.org/JDFSchema_1_1">
     <xsl:output method="html" encoding="UTF-8"/>
     
     <xsl:template match="/">
         <html>
-            <head><title>Library Books</title></head>
+            <head><title>JDF Job Report</title></head>
             <body>
-                <h1>Library Collection</h1>
-                <ul>
-                    <xsl:for-each select="library/book">
-                        <li>
-                            <strong><xsl:value-of select="title"/></strong>
-                            by <xsl:value-of select="author"/>
-                            (<xsl:value-of select="year"/>)
-                        </li>
-                    </xsl:for-each>
-                </ul>
+                <h1>Print Job Report</h1>
+                <xsl:for-each select="//jdf:JDF">
+                    <h2>Job ID: <xsl:value-of select="@JobID"/></h2>
+                    <p><strong>Type:</strong> <xsl:value-of select="@Type"/></p>
+                    <p><strong>Customer:</strong> <xsl:value-of select="jdf:CustomerInfo/@CustomerID"/></p>
+                    
+                    <h3>Resources</h3>
+                    <ul>
+                        <xsl:for-each select="jdf:ResourcePool/jdf:Media">
+                            <li>
+                                Media: <xsl:value-of select="@MediaType"/> 
+                                (<xsl:value-of select="@Weight"/>g, 
+                                <xsl:value-of select="@Dimension"/>)
+                            </li>
+                        </xsl:for-each>
+                        <xsl:for-each select="jdf:ResourcePool/jdf:Component[@ComponentType='Sheet']">
+                            <li>
+                                Sheets: <xsl:value-of select="@Amount"/> units
+                            </li>
+                        </xsl:for-each>
+                    </ul>
+                </xsl:for-each>
             </body>
         </html>
     </xsl:template>
 </xsl:stylesheet>
 ```
 
-**Note**: This uses XSLT 1.0 syntax which is fully supported.
+**Result**: Downloads as `print-job_transformed.html`
 
-**Result**: Downloads as `books_transformed.html`
+### Example 2: JDF to CSV Export
 
-### Example 2: XML to XML Transformation with Syntax Highlighting
-
-**XSLT for filtering** (`filter-recent.xsl`):
+**XSLT for CSV export** (`jdf-to-csv.xsl`):
 ```xsl
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:jdf="http://www.cip4.org/JDFSchema_1_1">
+    <xsl:output method="text" encoding="UTF-8"/>
     
     <xsl:template match="/">
-        <recent-books>
-            <xsl:for-each select="library/book[year &gt; 1950]">
-                <book>
-                    <title><xsl:value-of select="title"/></title>
-                    <author><xsl:value-of select="author"/></author>
-                    <year><xsl:value-of select="year"/></year>
-                </book>
-            </xsl:for-each>
-        </recent-books>
+        <xsl:text>JobID,Type,CustomerID,MediaType,Weight,Amount&#10;</xsl:text>
+        <xsl:for-each select="//jdf:JDF">
+            <xsl:value-of select="@JobID"/><xsl:text>,</xsl:text>
+            <xsl:value-of select="@Type"/><xsl:text>,</xsl:text>
+            <xsl:value-of select="jdf:CustomerInfo/@CustomerID"/><xsl:text>,</xsl:text>
+            <xsl:value-of select="jdf:ResourcePool/jdf:Media/@MediaType"/><xsl:text>,</xsl:text>
+            <xsl:value-of select="jdf:ResourcePool/jdf:Media/@Weight"/><xsl:text>,</xsl:text>
+            <xsl:value-of select="jdf:ResourcePool/jdf:Component[@ComponentType='Sheet']/@Amount"/>
+            <xsl:text>&#10;</xsl:text>
+        </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>
 ```
 
-### Example 3: XSLT 1.0 Compatible Functions
+**Result**: Downloads as `print-job_transformed.csv`
 
-**XSLT for text processing** (`text-processing.xsl`):
+### Example 3: JDF Simplification (JDF to simplified XML)
+
+**XSLT for JDF simplification** (`jdf-simplify.xsl`):
 ```xsl
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:jdf="http://www.cip4.org/JDFSchema_1_1">
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     
     <xsl:template match="/">
-        <processed-books>
-            <xsl:for-each select="library/book">
-                <book>
-                    <!-- Use translate() for case conversion (XSLT 1.0 compatible) -->
-                    <title-upper>
-                        <xsl:value-of select="translate(title, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
-                    </title-upper>
-                    <!-- Use substring() and string-length() (XSLT 1.0 compatible) -->
-                    <title-short>
-                        <xsl:value-of select="substring(title, 1, 10)"/>
-                        <xsl:if test="string-length(title) &gt; 10">...</xsl:if>
-                    </title-short>
-                    <author><xsl:value-of select="author"/></author>
-                </book>
+        <PrintJobs>
+            <xsl:for-each select="//jdf:JDF">
+                <Job>
+                    <ID><xsl:value-of select="@JobID"/></ID>
+                    <Type><xsl:value-of select="@Type"/></Type>
+                    <Customer><xsl:value-of select="jdf:CustomerInfo/@CustomerID"/></Customer>
+                    <Materials>
+                        <xsl:for-each select="jdf:ResourcePool/jdf:Media">
+                            <Media type="{@MediaType}" weight="{@Weight}"/>
+                        </xsl:for-each>
+                    </Materials>
+                    <Quantities>
+                        <xsl:for-each select="jdf:ResourcePool/jdf:Component[@ComponentType='Sheet']">
+                            <Sheets><xsl:value-of select="@Amount"/></Sheets>
+                        </xsl:for-each>
+                    </Quantities>
+                </Job>
             </xsl:for-each>
-        </processed-books>
+        </PrintJobs>
     </xsl:template>
 </xsl:stylesheet>
 ```
 
-**Note**: This example shows XSLT 1.0 compatible text processing functions.
+**Note**: This example shows JDF namespace handling in XSLT 1.0, which is fully supported.
+
+**Result**: Downloads as `print-job_transformed.jdf` (maintains JDF extension for XML output from JDF input)
 
 ## 🐛 Troubleshooting
 
@@ -270,26 +311,32 @@ You can customize the appearance by modifying CSS variables:
 - **Note**: Internet Explorer is not supported
 
 #### Files not uploading
-- **Check file size**: XML files must be < 10MB, XSLT files < 5MB
-- **Check file extension**: Only `.xml`, `.xsl`, `.xslt` files are accepted
-- **Verify file format**: Ensure files are valid XML/XSLT
+- **Check file size**: XML/JDF files must be < 10MB, XSLT files < 5MB
+- **Check file extension**: Only `.xml`, `.jdf`, `.xsl`, `.xslt` files are accepted
+- **Verify file format**: Ensure files are valid XML/JDF/XSLT
+
+#### JDF-specific issues
+- **Invalid JDF structure**: Check for required `<JDF>` root element with `Type` and `ID` attributes
+- **Namespace issues**: Ensure proper JDF namespace declaration (`xmlns="http://www.cip4.org/JDFSchema_1_1"`)
+- **JDF validation warnings**: The app will warn about missing required JDF attributes but still process the file
 
 #### XSLT transformation fails with "function not found" error
 - **Cause**: Using XSLT 2.0 or 3.0 functions in your stylesheet
 - **Solution**: Rewrite using XSLT 1.0 compatible functions
-- **Examples**: 
-  - Use `substring()` instead of `regex` functions
+- **JDF Examples**: 
+  - Use `substring()` instead of `regex` functions for JDF ID processing
   - Use `translate()` for case conversion instead of `upper-case()`/`lower-case()`
-  - Avoid date/time formatting functions
+  - Avoid date/time formatting functions in JDF timestamp processing
 
-#### XML parsing errors
+#### XML/JDF parsing errors
 - **Check XML version**: Ensure you're using XML 1.0 or 1.1
 - **Validate encoding**: UTF-8 is recommended
 - **Check well-formedness**: All tags must be properly closed and nested
+- **JDF validation**: Ensure JDF elements follow CIP4 standards
 
 #### Syntax highlighting not appearing
 - **Check console**: Open developer tools to see detection logs
-- **Verify content**: Ensure the output contains XML structure
+- **Verify content**: Ensure the output contains XML/JDF structure
 - **Try toggle**: Use the Raw/Highlight button to manually switch views
 
 ### Debug Information
@@ -297,16 +344,42 @@ You can customize the appearance by modifying CSS variables:
 The application logs detailed information to the browser console:
 
 ```javascript
-// Example console output
+// Example console output for JDF files
 Transformation result analysis: {
-    contentLength: 1234,
-    firstChars: "<?xml version='1.0'?>...",
+    contentLength: 2456,
+    firstChars: "<?xml version='1.0'?><JDF...",
     isDetectedAsXML: true,
+    isDetectedAsJDF: true,
     xsltOutputMethod: "xml",
-    hasOpeningTags: 5,
-    hasClosingTags: 5
+    hasOpeningTags: 12,
+    hasClosingTags: 12,
+    jdfNamespaceFound: true
 }
 ```
+
+## 🔍 JDF (Job Definition Format) Information
+
+### What is JDF?
+JDF (Job Definition Format) is an XML-based technical standard used in the printing industry to:
+- Define print job specifications
+- Automate workflow processes
+- Track job progress and status
+- Manage resources and materials
+- Ensure quality control
+
+### Common JDF Elements
+- **`<JDF>`**: Root element containing job definition
+- **`<ResourcePool>`**: Container for job resources (media, components, etc.)
+- **`<NodeInfo>`**: Information about processing nodes
+- **`<AuditPool>`**: Audit trail and job history
+- **`<CustomerInfo>`**: Customer and order information
+
+### JDF Transformation Use Cases
+- **Report Generation**: Convert JDF to HTML reports for management
+- **Data Export**: Extract JDF data to CSV for analysis
+- **Format Conversion**: Simplify complex JDF to basic XML
+- **Integration**: Transform JDF for different systems
+- **Archival**: Convert JDF to readable formats for long-term storage
 
 ## 🤝 Contributing
 
@@ -315,7 +388,7 @@ Transformation result analysis: {
 1. **Clone the repository**
 2. **Open in your preferred editor**
 3. **Use a local web server** for testing
-4. **Test in multiple browsers**
+4. **Test with both XML and JDF files**
 
 ### Code Style
 
@@ -327,7 +400,7 @@ Transformation result analysis: {
 
 1. **Fork the repository**
 2. **Create a feature branch**
-3. **Test thoroughly**
+3. **Test thoroughly with various JDF files**
 4. **Submit a pull request**
 
 ## 📄 License
@@ -363,14 +436,21 @@ SOFTWARE.
 - **Check the troubleshooting section** above
 - **Open browser developer tools** for error messages
 - **Verify browser compatibility**
-- **Test with simple XML/XSLT files** first
+- **Test with simple XML/JDF and XSLT files** first
+- **Use the JDF info modal** in the application for format guidance
 
 ### Browser Console Debugging
 
-Enable debugging by opening Developer Tools (F12) and checking the Console tab for detailed transformation analysis.
+Enable debugging by opening Developer Tools (F12) and checking the Console tab for detailed transformation analysis and JDF validation messages.
+
+### JDF Resources
+
+- **CIP4 Organization**: [www.cip4.org](https://www.cip4.org) - Official JDF standards
+- **JDF Specification**: Technical documentation for JDF format
+- **Sample JDF Files**: Use the application's help modal for example JDF structures
 
 ---
 
-**Made with ❤️ for the XML/XSLT community**
+**Made with ❤️ for the XML/JDF and printing industry community**
 
-*Transform your data with style and ease!*
+*Transform your XML and JDF data with style and ease!*

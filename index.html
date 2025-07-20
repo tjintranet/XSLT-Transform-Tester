@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XSLT Transformer</title>
+    <title>XSLT Transformer - XML/JDF Processor</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -25,8 +25,13 @@
                         <i class="bi bi-code-slash me-2"></i>
                         XSLT Transformer
                     </h1>
-                    <p class="text-muted mb-0">Upload XML/JDF and XSLT files to transform your data. XML Version: Supports XML 1.0 and XML 1.1
-XSLT Version: Supports XSLT 1.0</p>
+                    <p class="text-muted mb-0">Upload XML/JDF and XSLT files to transform your data</p>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <strong>Supported Formats:</strong> 
+                            XML 1.0/1.1 • JDF (Job Definition Format) • XSLT 1.0
+                        </small>
+                    </div>
                 </header>
             </div>
         </div>
@@ -34,7 +39,7 @@ XSLT Version: Supports XSLT 1.0</p>
         <div class="row">
             <!-- Upload Section -->
             <div class="col-lg-6 mb-4">
-                                        <div class="card shadow-sm h-100">
+                <div class="card shadow-sm h-100">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">
                             <i class="bi bi-upload me-2"></i>
@@ -42,24 +47,41 @@ XSLT Version: Supports XSLT 1.0</p>
                         </h5>
                     </div>
                     <div class="card-body">
-                        <!-- XML File Upload -->
+                        <!-- XML/JDF File Upload -->
                         <div class="mb-4">
                             <label for="xmlFile" class="form-label fw-bold">
                                 <i class="bi bi-file-earmark-text text-success me-1"></i>
-                                XML Document
+                                XML/JDF Document
                             </label>
                             <input type="file" class="form-control" id="xmlFile" accept=".xml,.jdf" required>
-                            <div class="form-text">Select your XML/JDF file to be transformed</div>
+                            <div class="form-text">
+                                Select your XML or JDF file to be transformed
+                                <br>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    <strong>XML:</strong> Standard XML documents (.xml)
+                                    <br>
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    <strong>JDF:</strong> Job Definition Format files (.jdf) used in printing industry
+                                </small>
+                            </div>
                         </div>
 
                         <!-- XSLT File Upload -->
                         <div class="mb-4">
                             <label for="xsltFile" class="form-label fw-bold">
                                 <i class="bi bi-file-earmark-code text-warning me-1"></i>
-                                XSLT Document
+                                XSLT Stylesheet
                             </label>
                             <input type="file" class="form-control" id="xsltFile" accept=".xsl,.xslt" required>
-                            <div class="form-text">Select your XSLT stylesheet file</div>
+                            <div class="form-text">
+                                Select your XSLT 1.0 stylesheet file
+                                <br>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Works with both XML and JDF source documents
+                                </small>
+                            </div>
                         </div>
 
                         <!-- Transform and Clear Buttons -->
@@ -67,7 +89,7 @@ XSLT Version: Supports XSLT 1.0</p>
                             <div class="col-8">
                                 <button type="button" class="btn btn-success btn-lg w-100" id="transformBtn" disabled>
                                     <i class="bi bi-arrow-repeat me-2"></i>
-                                    Transform XML
+                                    Transform Document
                                 </button>
                             </div>
                             <div class="col-4">
@@ -80,6 +102,33 @@ XSLT Version: Supports XSLT 1.0</p>
 
                         <!-- Status Messages -->
                         <div id="statusMessages" class="mt-3"></div>
+                        
+                        <!-- File Format Information -->
+                        <div class="mt-4">
+                            <div class="alert alert-info py-2">
+                                <h6 class="alert-heading mb-2">
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    Supported File Formats
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Input Files:</strong>
+                                        <ul class="list-unstyled mb-0 ms-2">
+                                            <li><i class="bi bi-check text-success me-1"></i>XML 1.0 & 1.1</li>
+                                            <li><i class="bi bi-check text-success me-1"></i>JDF (Job Definition Format)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Output Formats:</strong>
+                                        <ul class="list-unstyled mb-0 ms-2">
+                                            <li><i class="bi bi-check text-success me-1"></i>XML/JDF</li>
+                                            <li><i class="bi bi-check text-success me-1"></i>HTML</li>
+                                            <li><i class="bi bi-check text-success me-1"></i>CSV/Text</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,6 +151,9 @@ XSLT Version: Supports XSLT 1.0</p>
                             <div class="text-center text-muted py-5">
                                 <i class="bi bi-file-earmark-arrow-down display-1 opacity-25"></i>
                                 <p class="mt-3">Transformation result will appear here</p>
+                                <small class="text-muted">
+                                    Upload XML/JDF and XSLT files, then click Transform to see the results
+                                </small>
                             </div>
                         </div>
                         <textarea id="resultTextarea" class="form-control" rows="20" readonly style="display: none; font-family: monospace; font-size: 14px;"></textarea>
@@ -110,18 +162,80 @@ XSLT Version: Supports XSLT 1.0</p>
             </div>
         </div>
 
-        <!-- Loading Modal -->
-    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center py-4">
-                    <div class="spinner-border text-primary mb-3" role="status">
-                        <span class="visually-hidden">Loading...</span>
+        <!-- JDF Information Modal -->
+        <div class="modal fade" id="jdfInfoModal" tabindex="-1" aria-labelledby="jdfInfoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jdfInfoModalLabel">
+                            <i class="bi bi-info-circle me-2"></i>
+                            About JDF (Job Definition Format)
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <h5>Transforming XML...</h5>
-                    <p class="text-muted mb-0">Please wait while we process your files</p>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="bi bi-file-earmark-text text-primary me-1"></i>What is JDF?</h6>
+                                <p class="small">
+                                    JDF (Job Definition Format) is an XML-based file format used in the printing industry 
+                                    to describe print jobs, including specifications for materials, processes, and workflows.
+                                </p>
+                                
+                                <h6><i class="bi bi-gear text-warning me-1"></i>Common Use Cases:</h6>
+                                <ul class="small">
+                                    <li>Print job specifications</li>
+                                    <li>Workflow automation</li>
+                                    <li>Production planning</li>
+                                    <li>Quality control</li>
+                                    <li>Resource management</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="bi bi-code-square text-success me-1"></i>JDF Elements:</h6>
+                                <ul class="small">
+                                    <li><code>&lt;JDF&gt;</code> - Root element</li>
+                                    <li><code>&lt;ResourcePool&gt;</code> - Resources</li>
+                                    <li><code>&lt;NodeInfo&gt;</code> - Node information</li>
+                                    <li><code>&lt;AuditPool&gt;</code> - Audit trail</li>
+                                    <li><code>&lt;CustomerInfo&gt;</code> - Customer data</li>
+                                </ul>
+                                
+                                <h6><i class="bi bi-arrow-repeat text-info me-1"></i>Transformation:</h6>
+                                <p class="small">
+                                    Use XSLT to convert JDF files to other formats like HTML reports, 
+                                    CSV data exports, or simplified XML structures.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center py-4">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h5>Processing Document...</h5>
+                        <p class="text-muted mb-0">Please wait while we transform your XML/JDF file</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add JDF Info Button -->
+        <div class="position-fixed bottom-0 end-0 p-3">
+            <button type="button" class="btn btn-info btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#jdfInfoModal" title="Learn about JDF format">
+                <i class="bi bi-question-lg"></i>
+            </button>
         </div>
     </div>
 

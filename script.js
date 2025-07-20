@@ -44,7 +44,7 @@ class XSLTTransformer {
         if (file) {
             try {
                 if (!this.isValidXMLFile(file)) {
-                    throw new Error('Please select a valid XML file (.xml extension)');
+                    throw new Error('Please select a valid XML or JDF file (.xml or .jdf extension)');
                 }
                 
                 if (file.size > 10 * 1024 * 1024) {
@@ -54,16 +54,23 @@ class XSLTTransformer {
                 this.xmlFile = file;
                 this.xmlContent = await this.readFileContent(file);
                 
-                await this.validateXMLContent(this.xmlContent);
+                // Check if it's a JDF file and validate accordingly
+                const isJDFFile = this.isJDFFile(file, this.xmlContent);
+                if (isJDFFile) {
+                    await this.validateJDFContent(this.xmlContent);
+                    this.showStatus(`JDF file "${file.name}" loaded and validated successfully`, 'success');
+                } else {
+                    await this.validateXMLContent(this.xmlContent);
+                    this.showStatus(`XML file "${file.name}" loaded and validated successfully`, 'success');
+                }
                 
                 this.validateInput(this.xmlFileInput, true);
-                this.showStatus(`XML file "${file.name}" loaded and validated successfully`, 'success');
                 this.checkReadyState();
             } catch (error) {
                 this.xmlFile = null;
                 this.xmlContent = null;
                 this.validateInput(this.xmlFileInput, false);
-                this.showStatus(`Error with XML file: ${error.message}`, 'danger');
+                this.showStatus(`Error with file: ${error.message}`, 'danger');
             }
         }
     }
@@ -99,6 +106,81 @@ class XSLTTransformer {
                 this.showStatus(`Error with XSLT file: ${error.message}`, 'danger');
             }
         }
+    }
+    
+    /**
+     * Check if the file is a JDF file based on extension and content
+     * @param {File} file - The uploaded file
+     * @param {string} content - The file content
+     * @returns {boolean} - Whether this is a JDF file
+     */
+    isJDFFile(file, content) {
+        const fileName = file.name.toLowerCase();
+        const hasJDFExtension = fileName.endsWith('.jdf');
+        
+        // Check content for JDF-specific elements or namespaces
+        const hasJDFElements = content.includes('<JDF') || 
+                              content.includes('xmlns:jdf') ||
+                              content.includes('www.cip4.org') ||
+                              content.includes('JDF-') ||
+                              content.includes('<Job ') ||
+                              content.includes('JobPartID');
+        
+        return hasJDFExtension || hasJDFElements;
+    }
+    
+    /**
+     * Validate JDF content - JDF is XML with specific schema requirements
+     * @param {string} content - The JDF content to validate
+     */
+    async validateJDFContent(content) {
+        return new Promise((resolve, reject) => {
+            try {
+                // First validate as XML
+                const parser = new DOMParser();
+                const jdfDoc = parser.parseFromString(content, 'text/xml');
+                
+                const parseError = jdfDoc.querySelector('parsererror');
+                if (parseError) {
+                    reject(new Error(`Invalid JDF (XML parsing failed): ${parseError.textContent}`));
+                    return;
+                }
+                
+                if (!jdfDoc.documentElement) {
+                    reject(new Error('JDF document must have a root element'));
+                    return;
+                }
+                
+                const root = jdfDoc.documentElement;
+                
+                // Check for JDF-specific validation
+                if (root.localName === 'JDF' || content.includes('<JDF')) {
+                    // Basic JDF validation - check for required attributes
+                    const jdfElements = jdfDoc.querySelectorAll('JDF');
+                    if (jdfElements.length > 0) {
+                        const mainJDF = jdfElements[0];
+                        
+                        // JDF should have Type attribute
+                        if (!mainJDF.hasAttribute('Type') && !mainJDF.hasAttribute('type')) {
+                            console.warn('JDF element missing Type attribute - this may not be fully compliant');
+                        }
+                        
+                        // JDF should have ID attribute
+                        if (!mainJDF.hasAttribute('ID') && !mainJDF.hasAttribute('id')) {
+                            console.warn('JDF element missing ID attribute - this may not be fully compliant');
+                        }
+                    }
+                    
+                    console.log('JDF file validation passed - detected JDF-specific elements');
+                } else {
+                    console.log('File appears to be XML rather than JDF format, but will proceed');
+                }
+                
+                resolve();
+            } catch (error) {
+                reject(new Error(`JDF validation failed: ${error.message}`));
+            }
+        });
     }
     
     /**
@@ -172,7 +254,7 @@ class XSLTTransformer {
     }
     
     isValidXMLFile(file) {
-        const validExtensions = ['.xml'];
+        const validExtensions = ['.xml', '.jdf'];
         const fileName = file.name.toLowerCase();
         return validExtensions.some(ext => fileName.endsWith(ext));
     }
@@ -250,19 +332,22 @@ class XSLTTransformer {
         this.transformBtn.disabled = !isReady;
         
         if (isReady) {
-            this.transformBtn.innerHTML = '<i class="bi bi-arrow-repeat me-2"></i>Transform XML';
+            this.transformBtn.innerHTML = '<i class="bi bi-arrow-repeat me-2"></i>Transform XML/JDF';
             this.showStatus('Ready to transform! Click the Transform button.', 'info');
         }
     }
     
     async performTransformation() {
         if (!this.xmlContent || !this.xsltContent) {
-            this.showStatus('Please select both XML and XSLT files', 'danger');
+            this.showStatus('Please select both XML/JDF and XSLT files', 'danger');
             return;
         }
         
         this.showLoadingModal(true);
-        this.showStatus('Transforming XML...', 'info');
+        
+        // Update status message based on file type
+        const isJDF = this.isJDFFile(this.xmlFile, this.xmlContent);
+        this.showStatus(`Transforming ${isJDF ? 'JDF' : 'XML'}...`, 'info');
         
         try {
             await new Promise(resolve => setTimeout(resolve, 500));
@@ -290,7 +375,7 @@ class XSLTTransformer {
                 
                 const xmlParseError = xmlDoc.querySelector('parsererror');
                 if (xmlParseError) {
-                    throw new Error(`XML parsing error: ${xmlParseError.textContent}`);
+                    throw new Error(`XML/JDF parsing error: ${xmlParseError.textContent}`);
                 }
                 
                 const xsltDoc = parser.parseFromString(xsltString, 'text/xml');
@@ -807,6 +892,10 @@ class XSLTTransformer {
             const baseName = this.xmlFile ? this.xmlFile.name.replace(/\.[^/.]+$/, '') : 'transformed';
             let filename, mimeType;
             
+            // Check if original file was JDF for naming
+            const isJDF = this.isJDFFile(this.xmlFile, this.xmlContent);
+            const basePrefix = isJDF ? 'jdf' : 'xml';
+            
             // Check for CSV content first
             if (this.detectCSVContent(content.trim())) {
                 filename = `${baseName}_transformed.csv`;
@@ -837,8 +926,10 @@ class XSLTTransformer {
                         break;
                     case 'xml':
                     default:
-                        filename = `${baseName}_transformed.xml`;
-                        mimeType = 'application/xml';
+                        // If original was JDF, keep JDF extension for XML output
+                        const extension = isJDF ? 'jdf' : 'xml';
+                        filename = `${baseName}_transformed.${extension}`;
+                        mimeType = isJDF ? 'application/vnd.cip4-jdf+xml' : 'application/xml';
                         if (!content.trim().startsWith('<?xml')) {
                             content = '<?xml version="1.0" encoding="UTF-8"?>\n' + content;
                         }
@@ -854,8 +945,10 @@ class XSLTTransformer {
                     filename = `${baseName}_transformed.html`;
                     mimeType = 'text/html';
                 } else if (content.includes('<?xml') || content.includes('<')) {
-                    filename = `${baseName}_transformed.xml`;
-                    mimeType = 'application/xml';
+                    // If original was JDF, keep JDF extension for XML-like output
+                    const extension = isJDF ? 'jdf' : 'xml';
+                    filename = `${baseName}_transformed.${extension}`;
+                    mimeType = isJDF ? 'application/vnd.cip4-jdf+xml' : 'application/xml';
                     if (!content.trim().startsWith('<?xml')) {
                         content = '<?xml version="1.0" encoding="UTF-8"?>\n' + content;
                     }
